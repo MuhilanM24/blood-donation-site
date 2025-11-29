@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donation Hub - Save Lives Today</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff4757, #ff6b9d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #ff4757;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: linear-gradient(45deg, #ff4757, #ff6b9d);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .owner-access {
+            background: linear-gradient(45deg, #ff4757, #ff6b9d);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255,71,87,0.4);
+        }
+
+        .owner-access:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,71,87,0.6);
+        }
+
+        main {
+            margin-top: 80px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 5rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            background: linear-gradient(45deg, #fff, #f8f9fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            animation: slideInUp 1s ease;
+        }
+
+        @keyframes slideInUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.95);
+            margin-bottom: 2rem;
+            animation: slideInUp 1s ease 0.2s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff4757, #ff6b9d);
+            color: white;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255,71,87,0.4);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(255,71,87,0.6);
+        }
+
+        .floating-hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 2rem;
+            color: rgba(255,255,255,0.8);
+            animation: float 6s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stats {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin: 2rem auto;
+            padding: 3rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .stat-item {
+            text-align: center;
+            animation: slideInUp 1s ease both;
+        }
+
+        .stat-item:nth-child(1) { animation-delay: 0.1s; }
+        .stat-item:nth-child(2) { animation-delay: 0.2s; }
+        .stat-item:nth-child(3) { animation-delay: 0.3s; }
+        .stat-item:nth-child(4) { animation-delay: 0.4s; }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff4757, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .about {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 4rem;
+            text-align: center;
+            color: white;
+        }
+
+        .about h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .blood-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .blood-type-card {
+            background: rgba(39, 47, 42, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        .blood-type-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .blood-type {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .donor-form {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #ff4757;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #ff4757, #ff6b9d);
+            color: white;
+            padding: 1.2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255,71,87,0.4);
+        }
+
+        /* Owner Panel */
+        .owner-panel {
+            display: none;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .owner-panel h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .donor-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .donor-item {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            animation: slideInRight 0.5s ease;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(50px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .close-btn {
+            background: rgba(0, 0, 0, 0.845);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            float: right;
+            transition: background 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(255,71,87,0.8);
+        }
+
+        .password-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .password-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            animation: modalPop 0.3s ease;
+        }
+
+        @keyframes modalPop {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .password-box input {
+            padding: 1rem;
+            font-size: 1.2rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            width: 250px;
+            margin: 1rem 0;
+        }
+
+        .password-btn {
+            background: linear-gradient(45deg, #ff4757, #ff6b9d);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .password-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        footer {
+            background: rgba(0,0,0,0.8);
+            color: rgb(241, 235, 235);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 5rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .nav-links { display: none; }
+            .stats { grid-template-columns: 1fr 1fr; }
+        }
+
+        .success-message {
+            background: linear-gradient(45deg, #00b894, #55a3ff);
+            color: rgb(247, 244, 244);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            margin: 1rem 0;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">🩸 BloodHub</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#donate">Donate</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="owner-access" onclick="showPasswordModal()">Owner Access</button>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="floating-hearts" id="heartsContainer"></div>
+            <h1>Your Blood Can Save Lives!</h1>
+            <p>Join thousands of heroes making a difference every day.</p>
+            <a href="#donate" class="cta-button">Donate Now 🚀</a>
+        </section>
+
+        <section class="stats">
+            <div class="stat-item">
+                <div class="stat-number" data-target="50000">0</div>
+                <div>Donors Saved</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="250">0</div>
+                <div>Hospitals Served</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="1000000">0</div>
+                <div>Lives Impacted</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="365">0</div>
+                <div>Days Active</div>
+            </div>
+        </section>
+
+        <section id="about" class="about">
+            <h2>Why Donate Blood?</h2>
+            <p>One donation can save up to 3 lives. Your small act creates a ripple effect of hope and healing across communities.</p>
+            
+            <div class="blood-types">
+                <div class="blood-type-card" onclick="alert('O- is universal donor! Perfect for emergencies.')">
+                    <div class="blood-type">🩸 O-</div>
+                    <div><strong>Universal Donor</strong></div>
+                    <div>Can give to anyone</div>
+                </div>
+                <div class="blood-type-card" onclick="alert('AB+ receives from everyone! Rare receiver type.')">
+                    <div class="blood-type">🩸 AB+</div>
+                    <div><strong>Universal Receiver</strong></div>
+                    <div>Can receive from all</div>
+                </div>
+                <div class="blood-type-card" onclick="alert('A+ is common type! Always needed.')">
+                    <div class="blood-type">🩸 A+</div>
+                    <div>Common blood type</div>
+                    <div>High demand</div>
+                </div>
+                <div class="blood-type-card" onclick="alert('B- is rare! Specially needed.')">
+                    <div class="blood-type">🩸 B-</div>
+                    <div>Rare type</div>
+                    <div>Critical supply</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="donate" class="donor-form">
+            <h2 style="text-align: center; margin-bottom: 2rem; color: #333;">Register as Donor</h2>
+            <div id="successMessage" class="success-message">Thank you for registering! Your details have been saved. ❤️</div>
+            <form id="donorForm">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="tel" id="phone" required>
+                </div>
+                <div class="form-group">
+                    <label>Blood Group</label>
+                    <select id="bloodGroup" required>
+                        <option value="">Select Blood Group</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" id="location" placeholder="City/Area" required>
+                </div>
+                <div class="form-group">
+                    <label>Available Date</label>
+                    <input type="date" id="availableDate" required>
+                </div>
+                <button type="submit" class="submit-btn">Register Donation 🚀</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- Owner Password Modal -->
+    <div id="passwordModal" class="password-modal">
+        <div class="password-box">
+            <h3>🔐 Owner Access</h3>
+            <p>Enter password to view donor list:</p>
+            <input type="password" id="ownerPassword" placeholder="Password">
+            <br>
+            <button class="password-btn" onclick="checkPassword()">Access List</button>
+            <button class="password-btn" onclick="closePasswordModal()" style="background: #ddd; color: #333; margin-left: 1rem;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Owner Panel -->
+    <div id="ownerPanel" class="owner-panel">
+        <button class="close-btn" onclick="closeOwnerPanel()">Close Panel</button>
+        <h3>👑 Owner Donor Management</h3>
+        <div class="donor-list" id="donorList"></div>
+        <button class="submit-btn" onclick="clearAllDonors()" style="margin-top: 1rem; width: auto; padding: 0.8rem 2rem;">Clear All Data</button>
+    </div>
+
+    <footer id="contact">
+        <p>&copy; 2025 BloodHub. Saving lives, one donation at a time. | Contact: +91-9876543210 | info@bloodhub.com</p>
+    </footer>
+
+    <script>
+        // Animated Stats Counter
+        function animateStats() {
+            const stats = document.querySelectorAll('.stat-number');
+            stats.forEach(stat => {
+                const target = parseInt(stat.getAttribute('data-target'));
+                const increment = target / 100;
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        stat.textContent = target.toLocaleString();
+                        clearInterval(timer);
+                    } else {
+                        stat.textContent = Math.floor(current).toLocaleString();
+                    }
+                }, 20);
+            });
+        }
+
+        // Floating Hearts Animation
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            heart.style.animationDelay = Math.random() * 2 + 's';
+            
+            document.getElementById('heartsContainer').appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 7000);
+        }
+
+        // Generate hearts every 500ms
+        setInterval(createHeart, 500);
+
+        // Smooth Scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Donor Form Submission
+        document.getElementById('donorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const donor = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                bloodGroup: document.getElementById('bloodGroup').value,
+                location: document.getElementById('location').value,
+                availableDate: document.getElementById('availableDate').value,
+                timestamp: new Date().toLocaleString()
+            };
+
+            // Store in localStorage
+            let donors = JSON.parse(localStorage.getItem('donors')) || [];
+            donors.unshift(donor);
+            localStorage.setItem('donors', JSON.stringify(donors.slice(0, 100))); // Keep last 100
+
+            // Show success message
+            document.getElementById('successMessage').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('successMessage').style.display = 'none';
+            }, 5000);
+
+            // Reset form
+            this.reset();
+        });
+
+        // Owner Access Functions
+        const OWNER_PASSWORD = 'itz_i_am_muhilan';
+
+        function showPasswordModal() {
+            document.getElementById('passwordModal').style.display = 'flex';
+        }
+
+        function closePasswordModal() {
+            document.getElementById('passwordModal').style.display = 'none';
+            document.getElementById('ownerPassword').value = '';
+        }
+
+        function checkPassword() {
+            const password = document.getElementById('ownerPassword').value;
+            if (password === OWNER_PASSWORD) {
+                closePasswordModal();
+                showOwnerPanel();
+            } else {
+                alert('❌ Wrong Password!');
+                document.getElementById('ownerPassword').value = '';
+            }
+        }
+
+        function showOwnerPanel() {
+            const panel = document.getElementById('ownerPanel');
+            panel.style.display = 'block';
+            loadDonorList();
+            panel.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function closeOwnerPanel() {
+            document.getElementById('ownerPanel').style.display = 'none';
+        }
+
+        function loadDonorList() {
+            const donors = JSON.parse(localStorage.getItem('donors')) || [];
+            const list = document.getElementById('donorList');
+            list.innerHTML = '';
+
+            if (donors.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: rgba(255,255,255,0.8);">No donors registered yet.</p>';
+                return;
+            }
+
+            donors.forEach((donor, index) => {
+                const donorDiv = document.createElement('div');
+                donorDiv.className = 'donor-item';
+                donorDiv.innerHTML = `
+                    <strong>${donor.name}</strong> | ${donor.bloodGroup}<br>
+                    📧 ${donor.email} | 📱 ${donor.phone}<br>
+                    📍 ${donor.location} | 📅 ${donor.availableDate}<br>
+                    <small>Registered: ${donor.timestamp}</small>
+                `;
+                list.appendChild(donorDiv);
+            });
+        }
+
+        function clearAllDonors() {
+            if (confirm('Are you sure you want to delete ALL donor data?')) {
+                localStorage.removeItem('donors');
+                loadDonorList();
+            }
+        }
+
+        // Initialize animations on load
+        window.addEventListener('load', () => {
+            animateStats();
+            setTimeout(() => {
+                createHeart();
+            }, 1000);
+        });
+
+        // Close modal on outside click
+        document.getElementById('passwordModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePasswordModal();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && document.getElementById('passwordModal').style.display === 'flex') {
+                checkPassword();
+            }
+        });
+    </script>
+</body>
+</html>
